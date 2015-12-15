@@ -1,0 +1,112 @@
+THIS DOESENT WORK...IF YOU COULD FIX IT, that would be great. I keep getting the error "List index out of range".
+
+
+from Card import Card
+from Action import Action
+from Deck import Deck
+from Player import Player
+from collections import deque
+
+class Table(object):
+	def __init__(self):
+		print("Initializing players...")
+		self.players = []
+		for i in range(0,8):
+			self.players.append(Player("player"+str(i)))
+
+		self.small_blind = 1 # in dollars
+		self.big_blind = 2
+
+		self.deck = Deck()
+		self.dealer_position = 0
+		self.small_blind_position = 1
+		self.big_blind_position = 2
+
+	def deal(self):
+
+		self.deck.shuffle()
+		self.dealer_position = self.get_next_player_index(self.dealer_position)
+		self.small_blind_position = self.get_next_player_index(self.dealer_position)
+		self.big_blind_position = self.get_next_player_index(self.small_blind_position)
+
+		print("dealing new hand...")
+		for p in self.players:
+			print("Setting hole cards for player " + p.name + "...")
+			p.set_holecards(self.deck.pop(), self.deck.pop())
+
+		self.players[self.small_blind].post_small_blind(self.small_blind)
+		self.players[self.big_blind].post_big_blind(self.big_blind)
+		
+		################ PREFLOP ################
+		
+		finished_preflop = False
+
+		next_player = self.big_blind_position
+	
+		while not finished_preflop:
+			next_player = self.get_next_player_index(next_player)
+			
+			self.players[next_player].take_action(self)                #KEEPS BUGGIN HERE
+			finished_preflop = self.check_if_all_players_acted()
+
+		################ FLOP ################
+		self.deal_flop()
+
+		finished_flop = False
+		next_player = self.dealer_position
+		while not finished_flop :
+			next_player = self.get_next_player_index(next_player)
+			self.players[next_player].take_action(self)
+			finished_flop = self.check_if_all_players_acted()
+
+
+        ################ TURN ################
+		self.deal_turn()
+
+		finished_turn = False
+		next_player = self.dealer_position
+		while not finished_flop :
+			next_player = self.get_next_player_index(next_player)
+			self.players[next_player].take_action(self)
+			finished_turn = self.check_if_all_players_acted()     		
+		
+		################ RIVER ################
+		self.deal_river()
+
+		finished_river = False
+		next_player = self.dealer_position
+		while not finished_flop :
+			next_player = self.get_next_player_index(next_player)
+			self.players[next_player].take_action(self)
+			finished_river = self.check_if_all_players_acted()
+
+        ### FIND WINNERRRRRRRRrrrr......
+
+	def deal_flop(self):
+		print("Dealing flop...")
+		Deck.pop
+		Deck.pop
+		Deck.pop
+
+	def deal_turn(self):
+		print("Dealing turn...")
+		Deck.pop
+
+	def deal_river(self):
+		print("Dealing river...")
+		Deck.pop
+
+	def get_next_player_index(self,i):
+		
+	def get_next_player_index(self, i):                 # THIS DOESENT WORK
+		if i == len(self.players):
+			return 0
+		else:
+			return i+1	
+			
+	def check_if_all_players_acted(self):
+		
+		return False
+		
+	
+	
